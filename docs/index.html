@@ -112,7 +112,7 @@
 
 		<main class="container-fluid">
 			<section id="ultimas-noticias" class="row">
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
+				<article class="col-12 col-md-6 col-lg-12 py-3 noticia d-none">
 
 					<!-- Noticia #1 -->
 					<div class="row">
@@ -129,56 +129,7 @@
 					</div>
 
 				</article>
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
-
-					<!-- Noticia #2 -->
-					<div class="row">
-						<!-- Inicio Noticia -->
-						<div class="col-12 col-lg-4 noticia-img">
-							<img src="img/tickets-rusia-mundial.jpg" class="img-fluid">
-						</div>
-						<div class="col-12 col-lg-8 noticia-txt">
-							<h3>Comenzó la venta de entradas para el Mundial de Rusia 2018</h3>
-							<p>por <a href="#">Laura Smasnatta</a></p>
-							<p>Hoy se abrió la venta al público de tickets, a través del sitio oficial de la FIFA. El proceso se dividirá en dos partes y los espectadores deberán solicitar una tarjeta de hincha 'Fan ID'.</p>
-						</div>
-						<!-- Fin Noticia -->
-					</div>
-
-				</article>
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
-
-					<!-- Noticia #3 -->
-					<div class="row">
-						<!-- Inicio Noticia -->
-						<div class="col-12 col-lg-4 noticia-img">
-							<img src="img/firpo.jpg" class="img-fluid">
-						</div>
-						<div class="col-12 col-lg-8 noticia-txt">
-							<h3>A 94 años del derechazo que convirtió en leyenda a Luis Ángel Firpo</h3>
-							<p>por <a href="#">Diego Di Marco</a></p>
-							<p>El 14/9/1923 el boxeador argentino enfrento en Nueva York a Jack Dempsey, uno de los mejores pesos pesados de la historia.</p>
-						</div>
-						<!-- Fin Noticia -->
-					</div>
-
-				</article>
-				<article class="col-12 col-md-6 col-lg-12 py-3 noticia">
-
-					<!-- Noticia #3 -->
-					<div class="row">
-						<!-- Inicio Noticia -->
-						<div class="col-12 col-lg-4 noticia-img">
-							<img src="img/buenos-aires.jpg" class="img-fluid">
-						</div>
-						<div class="col-12 col-lg-8 noticia-txt">
-							<h3>Buenos Aires 2018 presentó su innovador proyecto de parques y de ceremonia inaugural ante el COI</h3>
-							<p>por <a href="#">Melina Morales</a></p>
-							<p>El Comité Organizador de los Juegos de la Juventud presentó su concepto de parques ante la 131a sesión del Comité Olímpico Internacional (COI) que se realizó en Lima. La ceremonia inaugural se realizará al aire libre.</p>
-						</div>
-						<!-- Fin Noticia -->
-					</div>
-
+				
 				</article>
 			</section>
 
@@ -247,7 +198,9 @@
 
 		
 			// 1) Obtención de datos
-			ajax.open("GET","noticias.json")
+			ajax.open("GET","https://api.sheety.co/66b454ef-f46f-477d-8a34-16050953c7c2")
+	
+			//ajax.open("GET"," https://api.rss2json.com/v1/api.json?rss_url=" + encodeURI("https://tn.com.ar/feed/deportes"))
 			//https://reqres.in/api/users?page=2
 			ajax.onload = function(){ //<-- hacer esto...(petision exitosa)
 				
@@ -259,15 +212,16 @@
 
 				//console.log("Después del parseo:")
 				let datos = JSON.parse(ajax.response) 
-				//console.log(datos) //>-- parseo de JSON a Object
+				console.log(datos) //>-- parseo de JSON a Object
 
 				//3) Procesar los datos
 
-				datos.noticias.forEach(function(item){
+				datos.forEach(function(item){
 				//4) Hacer uso de los datos individualizados	
 				//console.log(`Noticia del día: ${item.titulo} ${item.autor}`)
 				
-				crearNoticia(item)
+				//crearNoticia(item)
+				clonarNoticia(item)
 
 				})
 
@@ -310,6 +264,25 @@
 				
 			}
 
+			function clonarNoticia(noticia){
+				//console.log("ahora voy a clonar noticias")
+				//console.log(noticia)
+
+				let clon =  document.querySelector(".noticia").cloneNode(true)
+
+				clon.querySelector("h3").innerText = noticia.titulo
+				clon.querySelector("a").innerText = noticia.autor
+				clon.querySelector("p:last-child").innerText = noticia.detalle
+				clon.querySelector("img").src ="https://drive.google.com/uc?id=" + noticia.img|| "https://cdn.pixabay.com/photo/2015/09/07/08/22/under-928246__480.jpg"
+
+				clon.classList.remove("d-none")
+
+				document.querySelector("#ultimas-noticias").appendChild( clon )
+
+				console.log (clon)
+
+
+			}
 		</script>
 	</body>
 
